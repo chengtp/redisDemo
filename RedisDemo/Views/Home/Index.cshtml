@@ -1,0 +1,115 @@
+﻿@{
+    ViewBag.Title = "Index";
+    List<UserInfo> userInfoModels = ViewBag.UserInfoList;
+}
+@using RedisDemo.Models;
+<style type="text/css">
+    li {
+        list-style: none;
+    }
+</style>
+<script type="text/javascript">
+
+    //搜索事件
+    function searchClick() {
+        $.get("/home/Detail", { "Name": $("#searchName").val() }, function (data) {
+
+            var str = "";
+            for (var i = 0; i < data.UserModels.length; i++) {
+                str += "<li>" + "编号:" + data.UserModels[i].Id + " ,  姓名:" + data.UserModels[i].Name + " ,描述:" + data.UserModels[i].Desc + "<input type='button' value='删除' onclick='deleteClick(" + data.UserModels[i].Id + ")'/>" + "<input type='button' value='编辑' onclick='queryEditClick(" + data.UserModels[i].Id + ")'/>" + "</li>";
+            }
+
+            $("#sdiv").replaceWith("<div id='sdiv'><ul>" + str + "</ul></div>");
+        }, "json");
+    }
+
+    //添加事件
+    function createClick() {
+        $.post("/home/Create", { "Name": $("#createName").val(), "Desc": $("#createDesc").val() }, function (data) {
+
+            var str = "";
+            for (var i = 0; i < data.UserModels.length; i++) {
+                str += "<li>" + "编号:" + data.UserModels[i].Id + " ,  姓名:" + data.UserModels[i].Name + " ,描述:" + data.UserModels[i].Desc + "<input type='button' value='删除' onclick='deleteClick(" + data.UserModels[i].Id + ")'/>" + "<input type='button' value='编辑' onclick='queryEditClick(" + data.UserModels[i].Id + ")'/>" + "</li>";
+            }
+            //替换
+            $("#sdiv").replaceWith("<div id='sdiv'><ul>" + str + "</ul></div>");
+            //清空
+            $("#createName").val("");
+            $("#createDesc").val("");
+        }, "json");
+    }
+
+    //删除事件
+    function deleteClick(id) {
+        if (confirm("您确定要删除吗？")) {
+
+            $.post("/home/Delete", { "Id": id }, function (data) {
+
+                var str = "";
+                for (var i = 0; i < data.UserModels.length; i++) {
+                    str += "<li>" + "编号:" + data.UserModels[i].Id + " ,  姓名:" + data.UserModels[i].Name + " ,描述:" + data.UserModels[i].Desc + "<input type='button' value='删除' onclick='deleteClick(" + data.UserModels[i].Id + ")'/>" + "<input type='button' value='编辑' onclick='queryEditClick(" + data.UserModels[i].Id + ")'/>" + "</li>";
+                }
+                //替换
+                $("#sdiv").replaceWith("<div id='sdiv'><ul>" + str + "</ul></div>");
+
+            }, "json");
+        }
+    }
+
+    //查询修改操作
+    function queryEditClick(id) {
+        $.get("/home/Edit", { "Id": id }, function (data) {
+
+            $("#hId").val(id);
+            $("#editName").val(data.UserModel.Name);
+            $("#editDesc").val(data.UserModel.Desc);
+
+        }, "json");
+    }
+
+    //保存修改操作
+    function editClick() {
+        if ($("#hId").val()) {
+            var requestData = { "Id": $("#hId").val(), "Name": $("#editName").val(), "Desc": $("#editDesc").val() };
+            $.post("/home/Edit", requestData, function (data) {
+
+                var str = "";
+                for (var i = 0; i < data.UserModels.length; i++) {
+                    str += "<li>" + "编号:" + data.UserModels[i].Id + " ,  姓名:" + data.UserModels[i].Name + " ,描述:" + data.UserModels[i].Desc + "<input type='button' value='删除' onclick='deleteClick(" + data.UserModels[i].Id + ")'/>" + "<input type='button' value='编辑' onclick='queryEditClick(" + data.UserModels[i].Id + ")'/>" + "</li>";
+                }
+
+                $("#sdiv").replaceWith("<div id='sdiv'><ul>" + str + "</ul></div>");
+            }, "json");
+        }
+    }
+
+    function clearText() {
+
+    }
+
+
+
+</script>
+<div>
+    <a href="/home/Queue">队列 异常日志文件</a>
+    <br /><br />
+    查询条件：<input type="text" id="searchName" placeholder="编号/姓名/描述" /> <input type="button" onclick="searchClick()" value="查询" />
+    <br /><br />
+    姓名：<input type="text" id="createName" /> 描述：<input type="text" id="createDesc" /> <input type="button" onclick="createClick()" value="添加" />
+    <br /><br />
+    姓名：<input type="text" id="editName" /> 描述：<input type="text" id="editDesc" /> <input type="button" onclick="editClick()" value="保存修改" />
+    <input type="hidden" id="hId" value="" />
+    <div id="sdiv">
+        <ul>
+            @if (userInfoModels != null)
+            {
+                foreach (var item in userInfoModels)
+                {
+                    <li>编号:@item.Id ,  姓名:@item.Name , 描述:@item.Desc   <input type="button" value="删除" onclick="deleteClick(@item.Id)"><input type="button" value="编辑" onclick="queryEditClick(@item.Id)" /></li>
+
+                }
+            }
+        </ul>
+    </div>
+
+</div>
