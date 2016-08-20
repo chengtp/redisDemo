@@ -172,7 +172,8 @@ namespace RedisDemo.Controllers
             string b = "23";
             string c = "45";
              c = "45";
-             c = "45"; c = "45";
+             c = "45"; 
+            c = "45";
         }
     }
 }
