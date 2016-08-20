@@ -164,5 +164,10 @@ namespace RedisDemo.Controllers
             return View();
         }
         #endregion
+
+        private void test()
+        {
+
+        }
     }
 }
