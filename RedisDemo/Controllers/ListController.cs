@@ -167,7 +167,7 @@ namespace RedisDemo.Controllers
 
         private void test()
         {
-
+            string ss = "fsf";
         }
     }
 }
