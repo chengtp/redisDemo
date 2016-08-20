@@ -172,6 +172,7 @@ namespace RedisDemo.Controllers
             string b = "23";
             string c = "45";
             string d = "ddd";
+            string e = "fendou";
         }
     }
 }
