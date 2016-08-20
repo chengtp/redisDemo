@@ -176,6 +176,7 @@ namespace RedisDemo.Controllers
             c = "45";
             c = "45";
             c = "45";
+            c = "16";
         }
     }
 }
