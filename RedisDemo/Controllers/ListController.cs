@@ -169,6 +169,7 @@ namespace RedisDemo.Controllers
         {
             string ss = "fsf";
             string a = "12";
+            string b = "23";
         }
     }
 }
